@@ -1,6 +1,6 @@
 palavras = {
     "ingles": {
-        "Flabbergasted": "estupefato",
+        "Flabbergasted": "esstupefato",
         "Trousers": "calça",
         "Absquatulate": 'sair de fininho',
     },
