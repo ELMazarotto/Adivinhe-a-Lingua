@@ -15,18 +15,16 @@ class Usuario(Base):
     senha = Column(String, nullable=False)
     pontos = Column(Integer, default=0)
     acertos = Column(Integer, default=0)
-    def __init__(self, nome, senha, pontos, acertos):   
+    def __init__(self, nome, senha):   
      self.nome = nome
      self.senha = senha
-     self.pontos = pontos
-     self.acertos = acertos
 
 class Jogo(Base):
     __tablename__ = "jogos"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     palavra_id = Column(Integer, ForeignKey("palavras.id"))
-    palavra = relationship("Palavra", back_populates="palavras")
+    palavra = relationship("Palavra", back_populates="jogos")
     limite_jogadas = Column(Integer)
     pontuacao = Column(Integer)
     data = Column(DateTime)
@@ -57,6 +55,7 @@ class Palavra(Base):
     traducao = Column(String, nullable=False)
     lingua_id = Column(Integer, ForeignKey("linguas.id"), nullable=False)
     lingua = relationship("Lingua", back_populates="palavras")
+    jogos = relationship("Jogo", back_populates="palavra")
     def __init__(self, palavra, traducao, lingua:Lingua):   
      self.palavra = palavra
      self.traducao = traducao

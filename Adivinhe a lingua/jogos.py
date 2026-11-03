@@ -20,6 +20,7 @@ class Jogo:
         if self.diario:
             if self.data == date.today():
                 usuario.pontos += self.pontuacao
+        else: usuario.pontos += self.pontuacao
         session.commit()
     def advinhar(self, tentativa : str, session : Session, usuario: Usuario):
             if tentativa.lower() == self.resposta:
