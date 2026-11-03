@@ -1,5 +1,6 @@
-from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, DateTime, JSON
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker
+from sqlalchemy.ext.mutable import MutableList
 #from jogos import Jogo as JogoModel
 
 db = create_engine("sqlite:///banco.db")
@@ -27,7 +28,8 @@ class Jogo(Base):
     palavra = relationship("Palavra", back_populates="jogos")
     limite_jogadas = Column(Integer)
     pontuacao = Column(Integer)
-    data = Column(DateTime)
+    data = Column(DateTime, nullable=False)
+    usuarios = Column(MutableList.as_mutable(JSON), default=list)
     def __init__(self, jogo):
         self.palavra_id = jogo.palavra.id
         self.palavra = jogo.palavra
