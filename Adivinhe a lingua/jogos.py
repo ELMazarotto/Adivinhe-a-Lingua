@@ -1,9 +1,10 @@
 from models import Palavra, Usuario, Session
 from models import Jogo as JogoBD
 from datetime import date
+from sqlalchemy import select, func
 import random, time
 
-palavra_aleatoria = lambda session: session.query(Palavra).first() 
+palavra_aleatoria = lambda session: session.scalars(select(Palavra).order_by(func.random()).limit(1)).first()
 
 class Jogo:
     def __init__(self, palavra : Palavra ,pontuacao, limite_jogadas = None, diario=False, data = date.today()):
@@ -31,6 +32,8 @@ class Jogo:
             else: print("Errou!")
             if self.limite_jogadas:
                 self.tenativas += 1
+    def mostrar_palavra(self):
+        print(self.palavra.palavra)
     def registrar_bd(self, session: Session):
         novo_jogo : JogoBD = JogoBD(self)
         session.add(novo_jogo)
@@ -41,8 +44,13 @@ class Advinhar_Lingua(Jogo):
     def __init__(self, palavra : Palavra ,pontuacao, limite_jogadas = None, diario = False):
         super().__init__(palavra ,pontuacao, limite_jogadas, diario)
         self.resposta = self.palavra.lingua.nome
-    def mostrar_palavra(self):
-        print(self.palavra.palavra)
+
+
+class Advinhar_Traducao(Jogo):
+    def __init__(self, palavra : Palavra ,pontuacao, limite_jogadas = None, diario = False):
+        super().__init__(palavra ,pontuacao, limite_jogadas, diario)
+        self.resposta = self.palavra.traducao
+    
 
 
 
