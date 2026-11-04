@@ -1,8 +1,7 @@
-from models import Palavra, Usuario, Session
-from models import Jogo as JogoBD
+from Models import Palavra, Usuario, Session
+from Models import Jogo as JogoBD
 from datetime import date
 from sqlalchemy import select, func
-import random, time
 
 palavra_aleatoria = lambda session: session.scalars(select(Palavra).order_by(func.random()).limit(1)).first()
 
@@ -33,7 +32,8 @@ class Jogo:
             if self.limite_jogadas:
                 self.tenativas += 1
     def mostrar_palavra(self):
-        print(self.palavra.palavra)
+        print("A palavra é:",self.palavra.palavra)
+    
     def registrar_bd(self, session: Session):
         novo_jogo : JogoBD = JogoBD(self)
         session.add(novo_jogo)
