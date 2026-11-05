@@ -32,6 +32,12 @@ class Programa:
         print("Usuário inexistente")
         return False
 
+    def stats(self):
+        print(f"Status de usuario [{self.usuario}]: ")
+        print(f"   -pontos: [{self.usuario.pontos}]")
+        print(f"   -acertos totais: [{self.usuario.acertos}]")
+        print(f"")
+
     def rodar(self):
         new = input("Você é um usuario [NOVO]? (s/n)")
         if new == "n":
@@ -73,7 +79,11 @@ class Programa:
                 print("MODO SELECIONADO: Adivinhe a Tradução")
                 modo = int(input("MODO DIARIO(1) || MODO 100(2)"))
 
-                novo_jogo = jogos.Advinhar_Traducao(jogos.palavra_aleatoria(session), 50)
+                if modo == 1:
+                    novo_jogo = jogos.Advinhar_Traducao(jogos.palavra_aleatoria(session), 50, 5, True)
+
+                elif modo == 2:
+                    novo_jogo = jogos.Advinhar_Traducao(jogos.palavra_aleatoria(session), 1000, 100, False)
                 novo_jogo.mostrar_palavra()
                 novo_jogo.advinhar(input("Qual o significado desta palavra?"), session, self.usuario)
 
