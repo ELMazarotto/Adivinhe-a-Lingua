@@ -57,7 +57,7 @@ class Programa:
             print("Começando...")
             wait(3)
             print("ESCOLHA UM MODO: ")
-            mode = int(input("Adivinhe a Lingua(1) || Adivinhe a Tradução(2) || ENCERRAR(0): "))
+            mode = int(input("Adivinhe a Lingua(1) || Adivinhe a Tradução(2) || Mostrar seus STATUS(3) || ENCERRAR(0): "))
 
             if mode == 1:
                 print("MODO SELECIONADO: Adivinhe a Lingua")
@@ -87,9 +87,15 @@ class Programa:
                 novo_jogo.mostrar_palavra()
                 novo_jogo.advinhar(input("Qual o significado desta palavra?"), session, self.usuario)
 
+            elif mode == 3:
+                self.stats()
+
             elif mode == 0:
                 print("Até mais")
                 break
+
+            else:
+                raise ValueError(f"{mode} não é uma opção valida...")
             
 
             pass
