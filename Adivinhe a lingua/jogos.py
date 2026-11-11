@@ -28,9 +28,13 @@ class Jogo:
                 if self.pontuacao:
                     print("Você ganhou",self.pontuacao,"pontos!")
                     self.pontuar(usuario, session)
-            else: print("Errou!")
+                acertou = True
+            else:
+                print("Errou!")
+                acertou = False
             if self.limite_jogadas:
                 self.tenativas += 1
+            return acertou
     def mostrar_palavra(self):
         print("A palavra é:",self.palavra.palavra)
     

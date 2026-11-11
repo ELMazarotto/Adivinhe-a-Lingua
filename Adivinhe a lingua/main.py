@@ -17,7 +17,9 @@ class Programa:
 
     def cadastrar(self, username, password):
         new_user = Usuario(username, password)
-        self.name = new_user.nome
+        session.add(new_user)
+        session.commit()
+        self.usuario = new_user
 
     def logar(self, nome, senha):
         usuuario = session.query(Usuario).filter(Usuario.nome == nome).first()
@@ -45,47 +47,63 @@ class Programa:
         
         else:
             self.cadastrar(input("Digite seu [NOME]: "), input("Crie uma [SENHA]: "))
+
+        print(f"Bem-Vindo {self.usuario.nome} ao LingoGuesser™.\nEsse programa tem um conceito simples...")
+        btwn(2.5)
+        print("Em um modo você recebe uma palavra \ne você retorna em que lingua está esta palavra.")
+        wait(2)
+        print("No outro, você tembém recebe uma palavra\nmas você retorna seu significado...")
+        wait()
+        skip(2)
         
         while True:
-            print(f"Bem-Vindo {self.usuario.nome} ao LingoGuesser™.\nEsse programa tem um conceito simples...")
-            btwn(2.5)
-            print("Em um modo você recebe uma palavra \ne você retorna em que lingua está esta palavra.")
-            wait()
-            print("No outro, você tembém recebe uma palavra\nmas você retorna seu significado...")
-            wait()
-            skip(1)
+            
             print("Começando...")
-            wait(3)
+            wait(5)
             print("ESCOLHA UM MODO: ")
             mode = int(input("Adivinhe a Lingua(1) || Adivinhe a Tradução(2) || Mostrar seus STATUS(3) || ENCERRAR(0): "))
 
             if mode == 1:
                 print("MODO SELECIONADO: Adivinhe a Lingua")
-                modo = int(input("MODO DIARIO(1) || MODO 100(2)"))
+                modo = int(input("MODO DIARIO(1) || MODO INFINITY-LINGO(2)"))
 
                 if modo == 1:
                     novo_jogo = jogos.Advinhar_Lingua(jogos.palavra_aleatoria(session), 20, 5, True)
+                    
+                    novo_jogo.mostrar_palavra()
+                    novo_jogo.advinhar(input("Qual língua você acha que está essa palavra?"), session, self.usuario)
 
                 elif modo == 2:
-                    novo_jogo = jogos.Advinhar_Lingua(jogos.palavra_aleatoria(session), 400, 100, False)
+                    while True:
+                        jogo_atual = jogos.Advinhar_Lingua(jogos.palavra_aleatoria(session), 5, 1, False)
+                        jogo_atual.mostrar_palavra()
+                        if not jogo_atual.advinhar(input("Qual língua você acha que está essa palavra?"), session, self.usuario):
+                            print("GAME OVER")
+                            break
+
+
 
                 else:
                     raise ValueError("VALOR INVÁLIDO")
 
-                novo_jogo.mostrar_palavra()
-                novo_jogo.advinhar(input("Qual língua você acha que está essa palavra?"), session, self.usuario)
-            
+                
             elif mode == 2:
                 print("MODO SELECIONADO: Adivinhe a Tradução")
-                modo = int(input("MODO DIARIO(1) || MODO 100(2)"))
+                modo = int(input("MODO DIARIO(1) || MODO INFINITY-LINGO(2)"))
 
                 if modo == 1:
                     novo_jogo = jogos.Advinhar_Traducao(jogos.palavra_aleatoria(session), 50, 5, True)
+                    
+                    novo_jogo.mostrar_palavra()
+                    novo_jogo.advinhar(input("Qual o significado desta palavra?"), session, self.usuario)
 
                 elif modo == 2:
-                    novo_jogo = jogos.Advinhar_Traducao(jogos.palavra_aleatoria(session), 1000, 100, False)
-                novo_jogo.mostrar_palavra()
-                novo_jogo.advinhar(input("Qual o significado desta palavra?"), session, self.usuario)
+                    while True:
+                        novo_jogo = jogos.Advinhar_Traducao(jogos.palavra_aleatoria(session), 10, 1, False)
+                        novo_jogo.mostrar_palavra()
+                        if not novo_jogo.advinhar(input("Qual o significado desta palavra?"), session, self.usuario):
+                            print("GAME OVER")
+                            break
 
             elif mode == 3:
                 self.stats()
