@@ -1,5 +1,7 @@
 import jogos, time
-from Models import session, Usuario
+from Models import session, Usuario, Jogo
+from datetime import date
+
 
 def skip(amount):
     if amount > 0:
@@ -66,12 +68,18 @@ class Programa:
             if mode == 1:
                 print("MODO SELECIONADO: Adivinhe a Lingua")
                 modo = int(input("MODO DIARIO(1) || MODO INFINITY-LINGO(2)"))
-
                 if modo == 1:
-                    novo_jogo = jogos.Advinhar_Lingua(jogos.palavra_aleatoria(session), 20, 5, True)
-                    
+                    jogo : Jogo = session.query(Jogo).filter(Jogo.data==date.today()).first()
+                    if not jogo:
+                        novo_jogo = jogos.Advinhar_Lingua(jogos.palavra_aleatoria(session), 20, 5, True)
+                        novo_jogo.registrar_bd(session)
+                    else:
+                        novo_jogo = jogos.Advinhar_Lingua(jogo.palavra, jogo.pontuacao, jogo.limite_jogadas, True)
+                        if self.usuario.id in jogo.usuarios:
+                            raise ValueError("Você já jogou o jogo diário de hoje")
                     novo_jogo.mostrar_palavra()
                     novo_jogo.advinhar(input("Qual língua você acha que está essa palavra?"), session, self.usuario)
+                    
 
                 elif modo == 2:
                     while True:
@@ -92,8 +100,14 @@ class Programa:
                 modo = int(input("MODO DIARIO(1) || MODO INFINITY-LINGO(2)"))
 
                 if modo == 1:
-                    novo_jogo = jogos.Advinhar_Traducao(jogos.palavra_aleatoria(session), 50, 5, True)
-                    
+                    jogo : Jogo = session.query(Jogo).filter(Jogo.data==date.today()).first()
+                    if not jogo:
+                        novo_jogo = jogos.Advinhar_Traducao(jogos.palavra_aleatoria(session), 50, 5, True)
+                        novo_jogo.registrar_bd(session)
+                    else:
+                        novo_jogo = jogos.Advinhar_Traducao(jogo.palavra, jogo.pontuacao, jogo.limite_jogadas, True)
+                        if self.usuario.id in jogo.usuarios:
+                            raise ValueError("Você já jogou o jogo diário de hoje")
                     novo_jogo.mostrar_palavra()
                     novo_jogo.advinhar(input("Qual o significado desta palavra?"), session, self.usuario)
 
@@ -104,6 +118,8 @@ class Programa:
                         if not novo_jogo.advinhar(input("Qual o significado desta palavra?"), session, self.usuario):
                             print("GAME OVER")
                             break
+
+
 
             elif mode == 3:
                 self.stats()
