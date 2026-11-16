@@ -44,6 +44,11 @@ class Jogo:
         session.add(novo_jogo)
         session.commit()
 
+    def registrar_usuario(self, session : Session, usuario_id):
+        jogo : JogoBD = session.query(JogoBD).filter(func.date(JogoBD.data) == date.today()).first()
+        jogo.usuarios.append(usuario_id)
+        session.commit()
+
 
 class Advinhar_Lingua(Jogo):
     def __init__(self, palavra : Palavra ,pontuacao, limite_jogadas = None, diario = False):

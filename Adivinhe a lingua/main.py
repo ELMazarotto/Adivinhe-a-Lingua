@@ -1,7 +1,7 @@
 import jogos, time
 from Models import session, Usuario, Jogo
 from datetime import date
-
+from sqlalchemy import func
 
 def skip(amount):
     if amount > 0:
@@ -69,7 +69,7 @@ class Programa:
                 print("MODO SELECIONADO: Adivinhe a Lingua")
                 modo = int(input("MODO DIARIO(1) || MODO INFINITY-LINGO(2)"))
                 if modo == 1:
-                    jogo : Jogo = session.query(Jogo).filter(Jogo.data==date.today()).first()
+                    jogo : Jogo = session.query(Jogo).filter(func.date(Jogo.data) == date.today()).first()
                     if not jogo:
                         novo_jogo = jogos.Advinhar_Lingua(jogos.palavra_aleatoria(session), 20, 5, True)
                         novo_jogo.registrar_bd(session)
@@ -79,6 +79,7 @@ class Programa:
                             raise ValueError("Você já jogou o jogo diário de hoje")
                     novo_jogo.mostrar_palavra()
                     novo_jogo.advinhar(input("Qual língua você acha que está essa palavra?"), session, self.usuario)
+                    novo_jogo.registrar_usuario(session, self.usuario.id)
                     
 
                 elif modo == 2:
