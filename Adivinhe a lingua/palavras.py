@@ -29,7 +29,7 @@ palavras = {
         "tsuki": "lua",
         "hoshi": "estrela",
     },
-    "arabe": {
+    "árabe": {
         "salām": "paz",
         "qalb": "coração",
         "kitāb": "livro",
