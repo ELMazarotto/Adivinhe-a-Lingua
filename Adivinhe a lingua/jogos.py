@@ -17,10 +17,11 @@ class Jogo:
             self.data = data
     def pontuar(self, usuario : Usuario, session: Session):
         usuario.acertos += 1
-        if self.diario:
+        if not self.diario:
+            usuario.pontos += self.pontuacao
+        else:
             if self.data == date.today():
                 usuario.pontos += self.pontuacao
-        else: usuario.pontos += self.pontuacao
         session.commit()
     def advinhar(self, tentativa : str, session : Session, usuario: Usuario):
             if tentativa.lower() == self.resposta:
